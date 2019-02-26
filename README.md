@@ -3,5 +3,5 @@ Body Pose Estimation (Android gpu)
 
 
 
-<img src="./resource/demo.gif"/>
+<img src="./resource/demo.gif" height="500px"/>
 

@@ -94,17 +94,7 @@ public class Camera2BasicFragment extends Fragment
   private final Object lock = new Object();
   private boolean runClassifier = false;
   private boolean checkedPermissions = false;
-  private NumberPicker np;
   private ImageClassifier classifier;
-  private ListView deviceView;
-  private ListView modelView;
-
-
-  /** Max preview width that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_WIDTH = 1920;
-
-  /** Max preview height that is guaranteed by Camera2 API */
-  private static final int MAX_PREVIEW_HEIGHT = 1080;
 
   /**
    * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
@@ -119,9 +109,7 @@ public class Camera2BasicFragment extends Fragment
         }
 
         @Override
-        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {
-          configureTransform(width, height);
-        }
+        public void onSurfaceTextureSizeChanged(SurfaceTexture texture, int width, int height) {}
 
         @Override
         public boolean onSurfaceTextureDestroyed(SurfaceTexture texture) {
@@ -131,15 +119,6 @@ public class Camera2BasicFragment extends Fragment
         @Override
         public void onSurfaceTextureUpdated(SurfaceTexture texture) {}
       };
-
-  // Model parameter constants.
-  private String gpu;
-  private String cpu;
-  private String nnApi;
-  private String mobilenetV1Quant;
-  private String mobilenetV1Float;
-
-
 
   /** ID of the current {@link CameraDevice}. */
   private String cameraId;
@@ -152,9 +131,6 @@ public class Camera2BasicFragment extends Fragment
 
   /** A reference to the opened {@link CameraDevice}. */
   private CameraDevice cameraDevice;
-
-  /** The {@link android.util.Size} of camera preview. */
-  private Size previewSize;
 
   /** {@link CameraDevice.StateCallback} is called when {@link CameraDevice} changes its state. */
   private final CameraDevice.StateCallback stateCallback =
@@ -187,15 +163,7 @@ public class Camera2BasicFragment extends Fragment
         }
       };
 
-  private ArrayList<String> deviceStrings = new ArrayList<String>();
-  private ArrayList<String> modelStrings = new ArrayList<String>();
-
   /** Current indices of device and model. */
-  int currentDevice = -1;
-
-  int currentModel = -1;
-
-  int currentNumThreads = -1;
 
   /** An additional thread for running tasks that shouldn't block the UI. */
   private HandlerThread backgroundThread;
@@ -232,89 +200,6 @@ public class Camera2BasicFragment extends Fragment
             @NonNull TotalCaptureResult result) {}
       };
 
-  /**
-   * Shows a {@link Toast} on the UI thread for the classification results.
-   *
-   *
-   */
-//  private void showToast(String s) {
-//    SpannableStringBuilder builder = new SpannableStringBuilder();
-//    SpannableString str1 = new SpannableString(s);
-//    builder.append(str1);
-//    showToast(builder);
-//  }
-//
-//  private void showToast(SpannableStringBuilder builder) {
-//    final Activity activity = getActivity();
-//    if (activity != null) {
-//      activity.runOnUiThread(
-//          new Runnable() {
-//            @Override
-//            public void run() {
-//              textView.setText(builder, TextView.BufferType.SPANNABLE);
-//            }
-//          });
-//    }
-//  }
-
-  /**
-   * Resizes image.
-   *
-   * Attempting to use too large a preview size could  exceed the camera bus' bandwidth limitation,
-   * resulting in gorgeous previews but the storage of garbage capture data.
-   *
-   * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that is
-   * at least as large as the respective texture view size, and that is at most as large as the
-   * respective max size, and whose aspect ratio matches with the specified value. If such size
-   * doesn't exist, choose the largest one that is at most as large as the respective max size, and
-   * whose aspect ratio matches with the specified value.
-   *
-   * @param choices The list of sizes that the camera supports for the intended output class
-   * @param textureViewWidth The width of the texture view relative to sensor coordinate
-   * @param textureViewHeight The height of the texture view relative to sensor coordinate
-   * @param maxWidth The maximum width that can be chosen
-   * @param maxHeight The maximum height that can be chosen
-   * @param aspectRatio The aspect ratio
-   * @return The optimal {@code Size}, or an arbitrary one if none were big enough
-   */
-  private static Size chooseOptimalSize(
-      Size[] choices,
-      int textureViewWidth,
-      int textureViewHeight,
-      int maxWidth,
-      int maxHeight,
-      Size aspectRatio) {
-
-    // Collect the supported resolutions that are at least as big as the preview Surface
-    List<Size> bigEnough = new ArrayList<>();
-    // Collect the supported resolutions that are smaller than the preview Surface
-    List<Size> notBigEnough = new ArrayList<>();
-    int w = aspectRatio.getWidth();
-    int h = aspectRatio.getHeight();
-    for (Size option : choices) {
-      if (option.getWidth() <= maxWidth
-          && option.getHeight() <= maxHeight
-          && option.getHeight() == option.getWidth() * h / w) {
-        if (option.getWidth() >= textureViewWidth && option.getHeight() >= textureViewHeight) {
-          bigEnough.add(option);
-        } else {
-          notBigEnough.add(option);
-        }
-      }
-    }
-
-    // Pick the smallest of those big enough. If there is no one big enough, pick the
-    // largest of those not big enough.
-    if (bigEnough.size() > 0) {
-      return Collections.min(bigEnough, new CompareSizesByArea());
-    } else if (notBigEnough.size() > 0) {
-      return Collections.max(notBigEnough, new CompareSizesByArea());
-    } else {
-      Log.e(TAG, "Couldn't find any suitable preview size");
-      return choices[0];
-    }
-  }
-
   public static Camera2BasicFragment newInstance() {
     return new Camera2BasicFragment();
   }
@@ -327,135 +212,11 @@ public class Camera2BasicFragment extends Fragment
     return view;
   }
 
-  private void updateActiveModel() {
-    // Get UI information before delegating to background
-    final int modelIndex = modelView.getCheckedItemPosition();
-    final int deviceIndex = deviceView.getCheckedItemPosition();
-    final int numThreads = np.getValue();
-
-    backgroundHandler.post(() -> {
-      if (modelIndex == currentModel && deviceIndex == currentDevice
-              && numThreads == currentNumThreads) {
-        return;
-      }
-      currentModel = modelIndex;
-      currentDevice = deviceIndex;
-      currentNumThreads = numThreads;
-
-      // Disable classifier while updating
-      if (classifier != null) {
-        classifier.close();
-        classifier = null;
-      }
-
-      // Lookup names of parameters.
-      String model = modelStrings.get(modelIndex);
-      String device = deviceStrings.get(deviceIndex);
-
-      Log.i(TAG, "Changing model to " + model + " device " + device);
-
-      // Try to load model.
-      try {
-        if (model.equals(mobilenetV1Quant)) {
-          classifier = new ImageClassifierFloatBodypose(getActivity());
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          }
-        } else if (model.equals(mobilenetV1Float)) {
-          classifier = new ImageClassifierFloatBodypose(getActivity());
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          }
-        } else {
-//          showToast("Failed to load model");
-        }
-      } catch (IOException e) {
-        Log.d(TAG, "Failed to load", e);
-        classifier = null;
-      }
-
-      // Customize the interpreter to the type of device we want to use.
-      if (classifier == null) {
-        return;
-      }
-      classifier.setNumThreads(numThreads);
-      if (device.equals(cpu)) {
-      } else if (device.equals(gpu)) {
-        if (!GpuDelegateHelper.isGpuDelegateAvailable()) {
-//          showToast("gpu not in this build.");
-          classifier = null;
-        } else if (model.equals(mobilenetV1Quant)) {
-//          showToast("gpu requires float model.");
-          classifier = null;
-        } else {
-          classifier.useGpu();
-        }
-      } else if (device.equals(nnApi)) {
-        classifier.useNNAPI();
-      }
-    });
-  }
-
   /** Connect the buttons to their event handler. */
   @Override
   public void onViewCreated(final View view, Bundle savedInstanceState) {
-    gpu = getString(R.string.gpu);
-    cpu = getString(R.string.cpu);
-    nnApi = getString(R.string.nnapi);
-    mobilenetV1Quant = getString(R.string.mobilenetV1Quant);
-    mobilenetV1Float = getString(R.string.mobilenetV1Float);
-
     // Get references to widgets.
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-    deviceView = (ListView) view.findViewById(R.id.device);
-    modelView = (ListView) view.findViewById(R.id.model);
-
-    // Build list of models
-    modelStrings.add(mobilenetV1Quant);
-    modelStrings.add(mobilenetV1Float);
-
-    // Build list of devices
-    int defaultModelIndex = 0;
-    deviceStrings.add(cpu);
-    if (GpuDelegateHelper.isGpuDelegateAvailable()) {
-      deviceStrings.add(gpu);
-    }
-    deviceStrings.add(nnApi);
-
-    deviceView.setAdapter(
-        new ArrayAdapter<String>(
-            getContext(), R.layout.listview_row, R.id.listview_row_text, deviceStrings));
-    deviceView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-//    deviceView.setOnItemClickListener(
-//        new AdapterView.OnItemClickListener() {
-//          @Override
-//          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            updateActiveModel();
-//          }
-//        });
-    deviceView.setItemChecked(0, true);
-
-    modelView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    modelView.setItemChecked(defaultModelIndex, true);
-//    modelView.setOnItemClickListener(
-//        new AdapterView.OnItemClickListener() {
-//          @Override
-//          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//            updateActiveModel();
-//          }
-//        });
-
-    np = (NumberPicker) view.findViewById(R.id.np);
-    np.setMinValue(1);
-    np.setMaxValue(10);
-//    np.setWrapSelectorWheel(true);
-//    np.setOnValueChangedListener(
-//        new NumberPicker.OnValueChangeListener() {
-//          @Override
-//          public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-//            updateActiveModel();
-//          }
-//        });
-
-    // Start initial model.
   }
 
   /** Load the model and labels. */
@@ -531,66 +292,9 @@ public class Camera2BasicFragment extends Fragment
 
         // Find out if we need to swap dimension to get the preview size relative to sensor
         // coordinate.
-        int displayRotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-        // noinspection ConstantConditions
-        /* Orientation of the camera sensor */
-        int sensorOrientation = characteristics.get(CameraCharacteristics.SENSOR_ORIENTATION);
-        boolean swappedDimensions = false;
-        switch (displayRotation) {
-          case Surface.ROTATION_0:
-          case Surface.ROTATION_180:
-            if (sensorOrientation == 90 || sensorOrientation == 270) {
-              swappedDimensions = true;
-            }
-            break;
-          case Surface.ROTATION_90:
-          case Surface.ROTATION_270:
-            if (sensorOrientation == 0 || sensorOrientation == 180) {
-              swappedDimensions = true;
-            }
-            break;
-          default:
-            Log.e(TAG, "Display rotation is invalid: " + displayRotation);
-        }
 
         Point displaySize = new Point();
         activity.getWindowManager().getDefaultDisplay().getSize(displaySize);
-        int rotatedPreviewWidth = width;
-        int rotatedPreviewHeight = height;
-        int maxPreviewWidth = displaySize.x;
-        int maxPreviewHeight = displaySize.y;
-
-        if (swappedDimensions) {
-          rotatedPreviewWidth = height;
-          rotatedPreviewHeight = width;
-          maxPreviewWidth = displaySize.y;
-          maxPreviewHeight = displaySize.x;
-        }
-
-        if (maxPreviewWidth > MAX_PREVIEW_WIDTH) {
-          maxPreviewWidth = MAX_PREVIEW_WIDTH;
-        }
-
-        if (maxPreviewHeight > MAX_PREVIEW_HEIGHT) {
-          maxPreviewHeight = MAX_PREVIEW_HEIGHT;
-        }
-
-        previewSize =
-            chooseOptimalSize(
-                map.getOutputSizes(SurfaceTexture.class),
-                rotatedPreviewWidth,
-                rotatedPreviewHeight,
-                maxPreviewWidth,
-                maxPreviewHeight,
-                largest);
-
-        // We fit the aspect ratio of TextureView to the size of preview we picked.
-        int orientation = getResources().getConfiguration().orientation;
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-          textureView.setAspectRatio(previewSize.getWidth(), previewSize.getHeight());
-        } else {
-          textureView.setAspectRatio(previewSize.getHeight(), previewSize.getWidth());
-        }
 
         this.cameraId = cameraId;
         return;
@@ -600,8 +304,6 @@ public class Camera2BasicFragment extends Fragment
     } catch (NullPointerException e) {
       // Currently an NPE is thrown when the Camera2API is used but not supported on the
       // device this code runs.
-      ErrorDialog.newInstance(getString(R.string.camera_error))
-          .show(getChildFragmentManager(), FRAGMENT_DIALOG);
     }
   }
 
@@ -632,7 +334,6 @@ public class Camera2BasicFragment extends Fragment
       checkedPermissions = true;
     }
     setUpCameraOutputs(width, height);
-    configureTransform(width, height);
     Activity activity = getActivity();
     CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
     try {
@@ -696,7 +397,13 @@ public class Camera2BasicFragment extends Fragment
       runClassifier = true;
     }
     backgroundHandler.post(periodicClassify);
-    updateActiveModel();
+    Log.e("1번","1-1번");
+    try {
+      classifier = new ImageClassifierFloatBodypose(getActivity());
+    } catch (IOException e) {
+      e.printStackTrace();
+      Log.e("1번","1-2번");
+    }
   }
 
   /** Stops the background thread and its {@link Handler}. */
@@ -733,9 +440,6 @@ public class Camera2BasicFragment extends Fragment
     try {
       SurfaceTexture texture = textureView.getSurfaceTexture();
       assert texture != null;
-
-      // We configure the size of default buffer to be the size of camera preview we want.
-      texture.setDefaultBufferSize(previewSize.getWidth(), previewSize.getHeight());
 
       // This is the output Surface we need to start preview.
       Surface surface = new Surface(texture);
@@ -784,40 +488,6 @@ public class Camera2BasicFragment extends Fragment
     }
   }
 
-  /**
-   * Configures the necessary {@link android.graphics.Matrix} transformation to `textureView`. This
-   * method should be called after the camera preview size is determined in setUpCameraOutputs and
-   * also the size of `textureView` is fixed.
-   *
-   * @param viewWidth The width of `textureView`
-   * @param viewHeight The height of `textureView`
-   */
-  private void configureTransform(int viewWidth, int viewHeight) {
-    Activity activity = getActivity();
-    if (null == textureView || null == previewSize || null == activity) {
-      return;
-    }
-    int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
-    Matrix matrix = new Matrix();
-    RectF viewRect = new RectF(0, 0, viewWidth, viewHeight);
-    RectF bufferRect = new RectF(0, 0, previewSize.getHeight(), previewSize.getWidth());
-    float centerX = viewRect.centerX();
-    float centerY = viewRect.centerY();
-    if (Surface.ROTATION_90 == rotation || Surface.ROTATION_270 == rotation) {
-      bufferRect.offset(centerX - bufferRect.centerX(), centerY - bufferRect.centerY());
-      matrix.setRectToRect(viewRect, bufferRect, Matrix.ScaleToFit.FILL);
-      float scale =
-          Math.max(
-              (float) viewHeight / previewSize.getHeight(),
-              (float) viewWidth / previewSize.getWidth());
-      matrix.postScale(scale, scale, centerX, centerY);
-      matrix.postRotate(90 * (rotation - 2), centerX, centerY);
-    } else if (Surface.ROTATION_180 == rotation) {
-      matrix.postRotate(180, centerX, centerY);
-    }
-    textureView.setTransform(matrix);
-  }
-
   /** Classifies a frame from the preview stream. */
   private void classifyFrame() {
     if (classifier == null || getActivity() == null || cameraDevice == null) {
@@ -831,7 +501,6 @@ public class Camera2BasicFragment extends Fragment
 
     classifier.classifyFrame(bitmap, textToShow);
     bitmap.recycle();
-//    showToast(textToShow);
   }
 
   /** Compares two {@code Size}s based on their areas. */
@@ -842,36 +511,6 @@ public class Camera2BasicFragment extends Fragment
       // We cast here to ensure the multiplications won't overflow
       return Long.signum(
           (long) lhs.getWidth() * lhs.getHeight() - (long) rhs.getWidth() * rhs.getHeight());
-    }
-  }
-
-  /** Shows an error message dialog. */
-  public static class ErrorDialog extends DialogFragment {
-
-    private static final String ARG_MESSAGE = "message";
-
-    public static ErrorDialog newInstance(String message) {
-      ErrorDialog dialog = new ErrorDialog();
-      Bundle args = new Bundle();
-      args.putString(ARG_MESSAGE, message);
-      dialog.setArguments(args);
-      return dialog;
-    }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-      final Activity activity = getActivity();
-      return new AlertDialog.Builder(activity)
-          .setMessage(getArguments().getString(ARG_MESSAGE))
-          .setPositiveButton(
-              android.R.string.ok,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                  activity.finish();
-                }
-              })
-          .create();
     }
   }
 }

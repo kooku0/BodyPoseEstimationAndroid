@@ -88,14 +88,15 @@ public class DrawView extends View{
         canvas.drawLine(arr[5][1],arr[5][0], arr[6][1], arr[6][0], ppaint);
         canvas.drawLine(arr[6][1],arr[6][0], arr[7][1], arr[7][0], ppaint);
 
-        float x, y;
+        /*float x, y;
         x = (arr[8][1] + arr[11][1]) / 2 + 5;
-        y = (arr[8][0] + arr[11][0]) / 2 + 5;
+        y = (arr[8][0] + arr[11][0]) / 2 + 5;*/
 
-        canvas.drawLine(arr[1][1],arr[1][0], x, y, ppaint);
+        /*canvas.drawLine(arr[1][1],arr[1][0], x, y, ppaint);
         canvas.drawLine(x, y, arr[8][1], arr[8][0], ppaint);
-        canvas.drawLine(x, y, arr[11][1], arr[11][0], ppaint);
-
+        canvas.drawLine(x, y, arr[11][1], arr[11][0], ppaint);*/
+        canvas.drawLine(arr[1][1],arr[1][0], arr[8][1], arr[8][0], ppaint);
+        canvas.drawLine(arr[1][1],arr[1][0], arr[11][1], arr[11][0], ppaint);
 
         canvas.drawLine(arr[8][1],arr[8][0], arr[9][1], arr[9][0], ppaint);
         canvas.drawLine(arr[9][1],arr[9][0], arr[10][1], arr[10][0], ppaint);

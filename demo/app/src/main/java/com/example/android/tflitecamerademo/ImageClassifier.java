@@ -59,25 +59,10 @@ public abstract class ImageClassifier {
   /** output shape (heatmap shape)*/
 
   //model_h
-  private static final int HEATMAPWIGHT = 48;
-  private static final int HEATMAPHEIGHT = 48;
-  private static final int NUMJOINT = 14;
-  //이게 점들의수
-
-  // model_cpm
-  /*
   private static final int HEATMAPWIGHT = 96;
   private static final int HEATMAPHEIGHT = 96;
   private static final int NUMJOINT = 14;
-  */
-
-
-  //multi_person_mobilenet_v1_075_float
-  /*
-  private static final int HEATMAPWIGHT = 23;
-  private static final int HEATMAPHEIGHT = 17;
-  private static final int NUMJOINT = 17;
-  */
+  //이게 점들의수
 
   /** Tag for the {@link Log}. */
   private static final String TAG = "TfLiteCameraDemo";

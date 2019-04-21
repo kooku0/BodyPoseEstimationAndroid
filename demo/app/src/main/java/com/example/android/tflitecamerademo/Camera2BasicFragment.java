@@ -94,7 +94,6 @@ public class Camera2BasicFragment extends Fragment
   private final Object lock = new Object();
   private boolean runClassifier = false;
   private boolean checkedPermissions = false;
-  private TextView textView;
   private NumberPicker np;
   private ImageClassifier classifier;
   private ListView deviceView;
@@ -238,25 +237,25 @@ public class Camera2BasicFragment extends Fragment
    *
    *
    */
-  private void showToast(String s) {
-    SpannableStringBuilder builder = new SpannableStringBuilder();
-    SpannableString str1 = new SpannableString(s);
-    builder.append(str1);
-    showToast(builder);
-  }
-
-  private void showToast(SpannableStringBuilder builder) {
-    final Activity activity = getActivity();
-    if (activity != null) {
-      activity.runOnUiThread(
-          new Runnable() {
-            @Override
-            public void run() {
-              textView.setText(builder, TextView.BufferType.SPANNABLE);
-            }
-          });
-    }
-  }
+//  private void showToast(String s) {
+//    SpannableStringBuilder builder = new SpannableStringBuilder();
+//    SpannableString str1 = new SpannableString(s);
+//    builder.append(str1);
+//    showToast(builder);
+//  }
+//
+//  private void showToast(SpannableStringBuilder builder) {
+//    final Activity activity = getActivity();
+//    if (activity != null) {
+//      activity.runOnUiThread(
+//          new Runnable() {
+//            @Override
+//            public void run() {
+//              textView.setText(builder, TextView.BufferType.SPANNABLE);
+//            }
+//          });
+//    }
+//  }
 
   /**
    * Resizes image.
@@ -366,7 +365,7 @@ public class Camera2BasicFragment extends Fragment
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           }
         } else {
-          showToast("Failed to load model");
+//          showToast("Failed to load model");
         }
       } catch (IOException e) {
         Log.d(TAG, "Failed to load", e);
@@ -381,10 +380,10 @@ public class Camera2BasicFragment extends Fragment
       if (device.equals(cpu)) {
       } else if (device.equals(gpu)) {
         if (!GpuDelegateHelper.isGpuDelegateAvailable()) {
-          showToast("gpu not in this build.");
+//          showToast("gpu not in this build.");
           classifier = null;
         } else if (model.equals(mobilenetV1Quant)) {
-          showToast("gpu requires float model.");
+//          showToast("gpu requires float model.");
           classifier = null;
         } else {
           classifier.useGpu();
@@ -406,7 +405,6 @@ public class Camera2BasicFragment extends Fragment
 
     // Get references to widgets.
     textureView = (AutoFitTextureView) view.findViewById(R.id.texture);
-    textView = (TextView) view.findViewById(R.id.text);
     deviceView = (ListView) view.findViewById(R.id.device);
     modelView = (ListView) view.findViewById(R.id.model);
 
@@ -426,40 +424,36 @@ public class Camera2BasicFragment extends Fragment
         new ArrayAdapter<String>(
             getContext(), R.layout.listview_row, R.id.listview_row_text, deviceStrings));
     deviceView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    deviceView.setOnItemClickListener(
-        new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            updateActiveModel();
-          }
-        });
+//    deviceView.setOnItemClickListener(
+//        new AdapterView.OnItemClickListener() {
+//          @Override
+//          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            updateActiveModel();
+//          }
+//        });
     deviceView.setItemChecked(0, true);
 
     modelView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-    ArrayAdapter<String> modelAdapter =
-        new ArrayAdapter<>(
-            getContext(), R.layout.listview_row, R.id.listview_row_text, modelStrings);
-    modelView.setAdapter(modelAdapter);
     modelView.setItemChecked(defaultModelIndex, true);
-    modelView.setOnItemClickListener(
-        new AdapterView.OnItemClickListener() {
-          @Override
-          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            updateActiveModel();
-          }
-        });
+//    modelView.setOnItemClickListener(
+//        new AdapterView.OnItemClickListener() {
+//          @Override
+//          public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//            updateActiveModel();
+//          }
+//        });
 
     np = (NumberPicker) view.findViewById(R.id.np);
     np.setMinValue(1);
     np.setMaxValue(10);
-    np.setWrapSelectorWheel(true);
-    np.setOnValueChangedListener(
-        new NumberPicker.OnValueChangeListener() {
-          @Override
-          public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-            updateActiveModel();
-          }
-        });
+//    np.setWrapSelectorWheel(true);
+//    np.setOnValueChangedListener(
+//        new NumberPicker.OnValueChangeListener() {
+//          @Override
+//          public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+//            updateActiveModel();
+//          }
+//        });
 
     // Start initial model.
   }
@@ -727,7 +721,7 @@ public class Camera2BasicFragment extends Fragment
         public void run() {
           synchronized (lock) {
             if (runClassifier) {
-              classifyFrame();
+                classifyFrame();
             }
           }
           backgroundHandler.post(periodicClassify);
@@ -781,7 +775,7 @@ public class Camera2BasicFragment extends Fragment
 
             @Override
             public void onConfigureFailed(@NonNull CameraCaptureSession cameraCaptureSession) {
-              showToast("Failed");
+//              showToast("Failed");
             }
           },
           null);
@@ -837,7 +831,7 @@ public class Camera2BasicFragment extends Fragment
 
     classifier.classifyFrame(bitmap, textToShow);
     bitmap.recycle();
-    showToast(textToShow);
+//    showToast(textToShow);
   }
 
   /** Compares two {@code Size}s based on their areas. */

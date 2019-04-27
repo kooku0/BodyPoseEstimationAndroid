@@ -48,7 +48,7 @@ public abstract class ImageClassifier {
     private static final int SMALL_COLOR = 0xffddaa88;
 
     /**
-     * output shape (heatmap shape)
+   zk  * output shape (heatmap shape)
      */
 
     //model_h
@@ -195,6 +195,7 @@ public abstract class ImageClassifier {
 
     void drawBodyPoint() {
         int index = 0;
+        int[][] arr = new int[14][2];
         for (int k = 0; k < getNumJoint(); k++) {
             float[][] heatmap = new float[getHeatmapWidth()][getHeatmapHeight()];
             for (int i = 0; i < getHeatmapWidth(); i++) {
@@ -204,11 +205,12 @@ public abstract class ImageClassifier {
             }
             int[] result = new int[2];
             result = findMaximumIndex(heatmap);
-            Log.d("yangace", "index[" + k + "] = " + " " + result[0] + " " + result[1] + " ");
+//            Log.d("yangace", "index[" + k + "] = " + " " + result[0] + " " + result[1] + " ");
 
-            DrawView.setArr(k, result);
+            arr[k] = result;
         }
-
+        DrawView.setArr(arr);
+        compareAccuracy(arr);
     }
 
     public static int[] findMaximumIndex(float[][] a) {
@@ -225,6 +227,75 @@ public abstract class ImageClassifier {
         }
         return answerArray;
     }
+
+    void compareAccuracy(int[][] resultArr) {
+        double[] compareArr = {124.778, 145.222, 64.369, 114.842, 114.842, 180};
+
+        double o1, o2, tmp, persentage = 0;
+        // Angle 1 (0,1,2)
+        try {
+            o1 = Math.atan((resultArr[0][1]-resultArr[1][1])/((resultArr[0][0]-resultArr[1][0])));
+            o2 = Math.atan((resultArr[2][1]-resultArr[1][1])/((resultArr[2][0]-resultArr[1][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+        persentage += (((compareArr[0] - Math.abs(tmp - compareArr[0])) / compareArr[0]) * 100);
+        // Angle 2 (1,2,3)
+        try {
+            o1 = Math.atan((resultArr[1][1]-resultArr[2][1])/((resultArr[1][0]-resultArr[2][0])));
+            o2 = Math.atan((resultArr[3][1]-resultArr[2][1])/((resultArr[3][0]-resultArr[2][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+        persentage += (((compareArr[1] - Math.abs(tmp - compareArr[1])) / compareArr[1]) * 100);
+        try {
+        // Angle 3 (2,3,4)
+            o1 = Math.atan((resultArr[2][1]-resultArr[3][1])/((resultArr[2][0]-resultArr[3][0])));
+            o2 = Math.atan((resultArr[4][1]-resultArr[3][1])/((resultArr[4][0]-resultArr[3][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+            persentage += (((compareArr[2] - Math.abs(tmp - compareArr[2])) / compareArr[2]) * 100);
+        // Angle 4 (0,1,5)
+        try {
+            o1 = Math.atan((resultArr[0][1]-resultArr[1][1])/((resultArr[0][0]-resultArr[1][0])));
+            o2 = Math.atan((resultArr[5][1]-resultArr[1][1])/((resultArr[5][0]-resultArr[1][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+        persentage += (((compareArr[3] - Math.abs(tmp - compareArr[3])) / compareArr[3]) * 100);
+        // Angle 5 (1,5,6)
+        try {
+            o1 = Math.atan((resultArr[1][1]-resultArr[5][1])/((resultArr[1][0]-resultArr[5][0])));
+            o2 = Math.atan((resultArr[6][1]-resultArr[5][1])/((resultArr[6][0]-resultArr[5][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+        persentage += (((compareArr[4] - Math.abs(tmp - compareArr[4])) / compareArr[4]) * 100);
+        // Angle 6 (5,6,7)
+        try {
+            o1 = Math.atan((resultArr[5][1]-resultArr[6][1])/((resultArr[5][0]-resultArr[6][0])));
+            o2 = Math.atan((resultArr[7][1]-resultArr[6][1])/((resultArr[7][0]-resultArr[6][0])));
+            tmp = Math.abs( (o1-o2) * 180/Math.PI );
+        }
+        catch (Exception e) {
+            tmp = 90;
+        }
+        persentage += (((compareArr[5] - Math.abs(tmp - compareArr[5])) / compareArr[5]) * 100);
+
+        Log.d("Accurancy", "persentage: " + persentage/6+" %");
+    }
+
   /*
   void applyFilter() {
     int numLabels = getNumLabels();

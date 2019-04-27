@@ -99,33 +99,34 @@ public class DrawView extends View {
         /*canvas.drawLine(arr[1][1],arr[1][0], x, y, ppaint);
         canvas.drawLine(x, y, arr[8][1], arr[8][0], ppaint);
         canvas.drawLine(x, y, arr[11][1], arr[11][0], ppaint);*/
-        canvas.drawLine(arr[1][1], arr[1][0], arr[8][1], arr[8][0], ppaint);
+
+        /*canvas.drawLine(arr[1][1], arr[1][0], arr[8][1], arr[8][0], ppaint);
         canvas.drawLine(arr[1][1], arr[1][0], arr[11][1], arr[11][0], ppaint);
 
         canvas.drawLine(arr[8][1], arr[8][0], arr[9][1], arr[9][0], ppaint);
         canvas.drawLine(arr[9][1], arr[9][0], arr[10][1], arr[10][0], ppaint);
         canvas.drawLine(arr[11][1], arr[11][0], arr[12][1], arr[12][0], ppaint);
-        canvas.drawLine(arr[12][1], arr[12][0], arr[13][1], arr[13][0], ppaint);
+        canvas.drawLine(arr[12][1], arr[12][0], arr[13][1], arr[13][0], ppaint);*/
 
-        for (int i = 0; i < NUMJOINT; i++) {
-            Log.d("check1", i + " : " + arr[i][0] + " " + arr[i][1]);
+        for (int i = 0; i < 8; i++) {
+//            Log.d("check1", i + " : " + arr[i][0] + " " + arr[i][1]);
             canvas.drawPoint(arr[i][1], arr[i][0], paint[i]);
         }
     }
 
-
-    public static void setArr(int index, int[] inputArr) {
-        arr[index][0] = (float) inputArr[0] / HEATMAPHEIGHT * MAX_PREVIEW_HEIGHT;
-        arr[index][1] = (float) inputArr[1] / HEATMAPWIDTH * MAX_PREVIEW_WIDTH;
-
-        if (index == 13) {
-            Log.d("count Check", "count: " + count + ", count1: " + count1++);
-            Log.d("line", "--------------");
-            for (int i = 0; i < NUMJOINT; i++) {
-                Log.d("check", arr[i][0] + " " + arr[i][1]);
-            }
-            Log.d("line", "--------------");
-            myView.invalidate();
+    public static void setArr(int[][] inputArr) {
+        for(int index = 0; index < NUMJOINT; index++){
+            arr[index][0] = (float) inputArr[index][0] / HEATMAPHEIGHT * MAX_PREVIEW_HEIGHT;
+            arr[index][1] = (float) inputArr[index][1] / HEATMAPWIDTH * MAX_PREVIEW_WIDTH;
         }
+
+        /*Log.d("count Check", "count: " + count + ", count1: " + count1++);
+        Log.d("line", "--------------");
+        for (int i = 0; i < NUMJOINT; i++) {
+            Log.d("check", arr[i][0] + " " + arr[i][1]);
+        }
+        Log.d("line", "--------------");*/
+        myView.invalidate();
+
     }
 }

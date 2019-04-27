@@ -49,6 +49,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.tflitecamerademo.view.AutoFitTextureView;
 import com.example.android.tflitecamerademo.view.DrawView;
@@ -85,6 +86,8 @@ public class Camera2BasicFragment extends Fragment
     private boolean checkedPermissions = false;
     private ImageClassifier classifier;
     public static int previewWidth;
+
+    public static TextView persentageText;
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
      * TextureView}.
@@ -238,8 +241,17 @@ public class Camera2BasicFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         // Get references to widgets.
         textureView = view.findViewById(R.id.texture);
+        persentageText = view.findViewById(R.id.persentage) ;
     }
 
+    public static void setPersentageText(String persentageString) {
+
+        persentageText.post ( new Runnable() {
+            public void run() {
+                persentageText.setText(persentageString);
+            }
+        });
+    }
 
     /**
      * Load the model and labels.

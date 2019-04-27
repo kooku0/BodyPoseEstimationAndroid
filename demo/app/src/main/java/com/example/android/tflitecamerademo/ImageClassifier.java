@@ -292,7 +292,7 @@ public abstract class ImageClassifier {
             tmp = 90;
         }
         persentage += (((compareArr[5] - Math.abs(tmp - compareArr[5])) / compareArr[5]) * 100);
-
+        Camera2BasicFragment.setPersentageText(String.valueOf(persentage/6));
         Log.d("Accurancy", "persentage: " + persentage/6+" %");
     }
 

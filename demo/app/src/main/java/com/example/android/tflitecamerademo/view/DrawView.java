@@ -114,10 +114,10 @@ public class DrawView extends View {
         }
     }
 
-    public static void setArr(int[][] inputArr) {
-        for(int index = 0; index < NUMJOINT; index++){
-            arr[index][0] = (float) inputArr[index][0] / HEATMAPHEIGHT * MAX_PREVIEW_HEIGHT;
-            arr[index][1] = (float) inputArr[index][1] / HEATMAPWIDTH * MAX_PREVIEW_WIDTH;
+    public static void setArr(float[][] inputArr) {
+        for (int index = 0; index < NUMJOINT; index++) {
+            arr[index][0] = inputArr[index][0] / HEATMAPHEIGHT * MAX_PREVIEW_HEIGHT;
+            arr[index][1] = inputArr[index][1] / HEATMAPWIDTH * MAX_PREVIEW_WIDTH;
         }
 
         /*Log.d("count Check", "count: " + count + ", count1: " + count1++);

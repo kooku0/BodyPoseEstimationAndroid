@@ -281,6 +281,7 @@ public abstract class ImageClassifier {
             persentage = getPersentage(compareArr[i], betweenAngle);
             Log.d("Accurancy", "목표 각도 :" + compareArr[i] + "  " + (i + 1) + "번 각도 : " + betweenAngle + "   정확도 : " + persentage);
         }
+        Camera2BasicFragment.setPersentageText(String.valueOf(persentage / 6));
         Log.d("Accurancy", "persentage: " + persentage / 6 + " %");
     }
 

@@ -27,7 +27,7 @@ public class DrawView extends View {
      */
     public static int MAX_PREVIEW_WIDTH;
     private static int count = 0;
-    private static int count1 = 1;
+    private static int count1 = 0;
 
     static View myView;
     private Paint paint[] = new Paint[14];

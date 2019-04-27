@@ -3,5 +3,11 @@ Body Pose Estimation (Android gpu)
 
 
 
-<img src="./resource/demo.gif" height="500px"/>
+<img src="./resource/demo.gif" height="300px"/>
+
+### Pose Matching percentage
+
+<img src="./resource/mid.gif" height="300px"/>
+
+
 

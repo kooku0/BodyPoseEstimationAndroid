@@ -24,16 +24,11 @@
         android:background="#bb7700">
 
 
-        <com.example.android.tflitecamerademo.AutoFitTextureView
+        <com.example.android.tflitecamerademo.view.AutoFitTextureView
             android:id="@+id/texture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
-
-        <!--<com.example.android.tflitecamerademo.FrameView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"/>-->
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -147,7 +142,7 @@
         </LinearLayout>
 
     </RelativeLayout>
-    <com.example.android.tflitecamerademo.DrawView
+    <com.example.android.tflitecamerademo.view.DrawView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/transparent" />

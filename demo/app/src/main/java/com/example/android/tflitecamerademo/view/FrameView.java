@@ -1,4 +1,4 @@
-package com.example.android.tflitecamerademo;
+package com.example.android.tflitecamerademo.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -57,7 +57,7 @@ public class FrameView extends View {
             cy = event.getY();
             draw = true;
             invalidate();
-        }else{
+        } else {
             performClick();
         }
         return true;

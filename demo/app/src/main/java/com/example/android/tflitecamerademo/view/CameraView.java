@@ -1,4 +1,4 @@
-package com.example.android.tflitecamerademo;
+package com.example.android.tflitecamerademo.view;
 
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -7,6 +7,9 @@ import android.support.v4.app.Fragment;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import com.example.android.tflitecamerademo.Camera2BasicFragment;
+import com.example.android.tflitecamerademo.R;
 
 public class CameraView extends View {
     public CameraView(Context context) {
@@ -29,7 +32,8 @@ public class CameraView extends View {
     public FragmentManager getFragmentManager() {
         return fragmentManager;
     }
-//    Camera2BasicFragment myFragment = (Camera2BasicFragment) getFragmentManager().findFragmentByTag("camera");
+
+    //    Camera2BasicFragment myFragment = (Camera2BasicFragment) getFragmentManager().findFragmentByTag("camera");
     private void init() {
 //        Fragment fragment = new PropertyFragment();
 

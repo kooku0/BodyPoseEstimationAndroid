@@ -17,15 +17,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
-    <com.example.android.tflitecamerademo.AutoFitTextureView
-        android:id="@+id/texture"
+    <RelativeLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:background="#bb7700">
 
-    <com.example.android.tflitecamerademo.DrawView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent" />
+        <com.example.android.tflitecamerademo.AutoFitTextureView
+            android:id="@+id/texture"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_info_view"
+            android:layout_weight="1" />
+
+        <com.example.android.tflitecamerademo.DrawView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottom_info_view"
+            android:background="@android:color/transparent" />
+
+        <LinearLayout
+            android:id="@+id/bottom_info_view"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:background="@android:color/white"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
 </FrameLayout>

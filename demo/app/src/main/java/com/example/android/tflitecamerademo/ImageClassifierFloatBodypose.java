@@ -26,38 +26,38 @@ import java.io.IOException;
  */
 public class ImageClassifierFloatBodypose extends ImageClassifier {
 
-  /**
-   * The inception net requires additional normalization of the used input.
-   */
-  //private static final int IMAGE_MEAN = 128;
-  //private static final float IMAGE_STD = 128.0f;
+    /**
+     * The inception net requires additional normalization of the used input.
+     */
+    //private static final int IMAGE_MEAN = 128;
+    //private static final float IMAGE_STD = 128.0f;
 
-  /**
-   * An array to hold inference results, to be feed into Tensorflow Lite as outputs.
-   * This isn't part of the super class, because we need a primitive array here.
-   */
-  //input shape float32[1,353,257,3]
-  //outpu shape float32[1,23,17,17]
-  private float[][][][] jointProbArray = null;
+    /**
+     * An array to hold inference results, to be feed into Tensorflow Lite as outputs.
+     * This isn't part of the super class, because we need a primitive array here.
+     */
+    //input shape float32[1,353,257,3]
+    //outpu shape float32[1,23,17,17]
+    private float[][][][] jointProbArray = null;
 
-  /**
-   * Initializes an {@code ImageClassifier}.
-   *
-   * @param activity
-   */
-  ImageClassifierFloatBodypose(Activity activity) throws IOException {
-    super(activity);
-    jointProbArray = new float[1][getHeatmapWidth()][getHeatmapHeight()][getNumJoint()];
-  }
+    /**
+     * Initializes an {@code ImageClassifier}.
+     *
+     * @param activity
+     */
+    ImageClassifierFloatBodypose(Activity activity) throws IOException {
+        super(activity);
+        jointProbArray = new float[1][getHeatmapWidth()][getHeatmapHeight()][getNumJoint()];
+    }
 
-  @Override
-  protected String getModelPath() {
-    // you can download this file from
-    // https://storage.googleapis.com/download.tensorflow.org/models/tflite/inception_v3_slim_2016_android_2017_11_10.zip
-    //return "multi_person_mobilenet_v1_075_float.tflite";
-    //return "model_cpm.tflite";
-    return "model_h.tflite";
-  }
+    @Override
+    protected String getModelPath() {
+        // you can download this file from
+        // https://storage.googleapis.com/download.tensorflow.org/models/tflite/inception_v3_slim_2016_android_2017_11_10.zip
+        //return "multi_person_mobilenet_v1_075_float.tflite";
+        //return "model_cpm.tflite";
+        return "model_h.tflite";
+    }
 
   /*
   @Override
@@ -66,28 +66,28 @@ public class ImageClassifierFloatBodypose extends ImageClassifier {
   }
   */
 
-  @Override
-  protected int getImageSizeX() {
-    return 192;
-    //return 353;
+    @Override
+    protected int getImageSizeX() {
+        return 192;
+        //return 353;
 
-  }
+    }
 
 
-  @Override
-  protected int getImageSizeY() {
-    return 192;
-    //return 257;
-  }
+    @Override
+    protected int getImageSizeY() {
+        return 192;
+        //return 257;
+    }
 
-  @Override
-  protected int getNumBytesPerChannel() {
-    // a 32bit float value requires 4 bytes
-    return 4;
-  }
+    @Override
+    protected int getNumBytesPerChannel() {
+        // a 32bit float value requires 4 bytes
+        return 4;
+    }
 
-  @Override
-  protected void addPixelValue(int pixelValue) {
+    @Override
+    protected void addPixelValue(int pixelValue) {
 
     /*
     imgData.putFloat((pixelValue & 0xFF) / 255.f);
@@ -95,16 +95,16 @@ public class ImageClassifierFloatBodypose extends ImageClassifier {
     imgData.putFloat(((pixelValue >> 16) & 0xFF) / 255.f);
     */
 
-    imgData.putFloat(Float.valueOf(pixelValue & 0xFF));
-    imgData.putFloat(Float.valueOf(pixelValue >> 8 & 0xFF));
-    imgData.putFloat(Float.valueOf(pixelValue >> 16 & 0xFF));
+        imgData.putFloat(Float.valueOf(pixelValue & 0xFF));
+        imgData.putFloat(Float.valueOf(pixelValue >> 8 & 0xFF));
+        imgData.putFloat(Float.valueOf(pixelValue >> 16 & 0xFF));
 
-  }
+    }
 
-  @Override
-  protected float getProbability(int index, int width, int height, int joint) {
-    return jointProbArray[index][width][height][joint];
-  }
+    @Override
+    protected float getProbability(int index, int width, int height, int joint) {
+        return jointProbArray[index][width][height][joint];
+    }
 
 
   /*
@@ -114,16 +114,16 @@ public class ImageClassifierFloatBodypose extends ImageClassifier {
   }
   */
 
-  /*
-  @Override
-  protected float getNormalizedProbability(int labelIndex) {
-    // TODO the following value isn't in [0,1] yet, but may be greater. Why?
-    return getProbability(labelIndex);
-  }
-  */
-  @Override
-  protected void runInference() {
-    tflite.run(imgData, jointProbArray);
+    /*
+    @Override
+    protected float getNormalizedProbability(int labelIndex) {
+      // TODO the following value isn't in [0,1] yet, but may be greater. Why?
+      return getProbability(labelIndex);
+    }
+    */
+    @Override
+    protected void runInference() {
+        tflite.run(imgData, jointProbArray);
     /*
     for (int i=0; i<96; i++){
       for (int j=0; j<96; j++) {
@@ -134,5 +134,5 @@ public class ImageClassifierFloatBodypose extends ImageClassifier {
     }
     */
 
-  }
+    }
 }

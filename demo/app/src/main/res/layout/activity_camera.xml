@@ -21,31 +21,4 @@
     tools:context="com.example.android.tflitecamerademo.CameraActivity">
 
 
-    <!--<com.example.android.tflitecamerademo.CameraView-->
-        <!--android:id="@+id/container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#000"/>-->
-    <!--<View-->
-        <!--android:id="@+id/container"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="#000"/>-->
-
-    <!--<com.example.android.tflitecamerademo.Camera2BasicFragment-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@android:color/black"/>-->
-
-    <!--<com.example.android.tflitecamerademo.FrameView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:background="@android:color/transparent"/>-->
-
-    <!--<View-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:background="@android:color/darker_gray"/>-->
-
-
 </FrameLayout>

@@ -13,24 +13,22 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#bb7700">
 
-        <com.example.android.tflitecamerademo.AutoFitTextureView
+        <com.example.android.tflitecamerademo.view.AutoFitTextureView
             android:id="@+id/texture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/bottom_info_view"
-            android:layout_weight="1" />
+            android:layout_above="@+id/bottom_info_view" />
 
-        <com.example.android.tflitecamerademo.DrawView
+        <com.example.android.tflitecamerademo.view.DrawView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/bottom_info_view"

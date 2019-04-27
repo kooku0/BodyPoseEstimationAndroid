@@ -11,8 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawView extends View{
-    private static final int HEATMAPWIGHT = 48;
-    private static final int HEATMAPHEIGHT = 48;
+    private static final int HEATMAPWIGHT = 96;
+    private static final int HEATMAPHEIGHT = 96;
     private static final int NUMJOINT = 14;
     /** Max preview width that is guaranteed by Camera2 API */
     private static final int MAX_PREVIEW_WIDTH = 1920;
@@ -108,10 +108,8 @@ public class DrawView extends View{
 
 
     public static void setArr(int index, int[] inputArr) {
-        arr[index][0] = (float)inputArr[0]/HEATMAPHEIGHT*1503;
-//        arr[index][0] = (float)inputArr[0]/HEATMAPHEIGHT*MAX_PREVIEW_WIDTH;
-        arr[index][1] = (float)inputArr[1]/HEATMAPWIGHT*MAX_PREVIEW_HEIGHT;
-
+        arr[index][0] = (float)inputArr[0] / HEATMAPWIGHT * MAX_PREVIEW_WIDTH;
+        arr[index][1] = (float)inputArr[1] / HEATMAPHEIGHT * MAX_PREVIEW_HEIGHT;
 
         if (index == 13){
             Log.d("count Check", "count: " +count + ", count1: " +count1++);

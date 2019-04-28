@@ -222,7 +222,7 @@ public abstract class ImageClassifier {
             }
             float[] result;
             result = findMaximumIndex(heatmap);
-//            Log.d("yangace", "index[" + k + "] = " + " " + result[0] + " " + result[1] + " ");
+//            Log.d("Bodypoint", "index[" + k + "] = " + " " + result[0] + " " + result[1] + " ");
 
             arr[k] = result;
         }
@@ -247,42 +247,38 @@ public abstract class ImageClassifier {
 
     private double getAngle(float[][] resultArr, int index) {
         List<Integer> basePoints = BASE_ANGLE_LIST.get(index).getPoints();
-        double thetaOne, thetaTwo;
+        double thetaA, thetaB, thetaC;
+        double temp, Angle;
+        thetaA = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(2)][1], 2) +
+                Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(2)][0], 2));
+        thetaB = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(1)][1], 2) +
+                Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(1)][0], 2));
+        thetaC = Math.sqrt(Math.pow(resultArr[basePoints.get(1)][1] - resultArr[basePoints.get(2)][1], 2) +
+                Math.pow(resultArr[basePoints.get(1)][0] - resultArr[basePoints.get(2)][0], 2));
 
-        try {
-            thetaOne = Math.atan((resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(1)][1])
-                    / (resultArr[basePoints.get(2)][1] - resultArr[1][0]));
-        } catch (Exception e) {
-            e.printStackTrace();
-            thetaOne = QUARTER_DEGREE;
-        }
-        try {
-            thetaTwo = Math.atan((resultArr[basePoints.get(2)][1] - resultArr[basePoints.get(1)][1])
-                    / (resultArr[basePoints.get(2)][0] - resultArr[1][0]));
-        } catch (Exception e) {
-            e.printStackTrace();
-            thetaTwo = QUARTER_DEGREE;
-        }
-        return Math.abs((thetaOne - thetaTwo) * HALF_DEGREE / Math.PI);
+        temp = (Math.pow(thetaB, 2) + Math.pow(thetaC, 2) - Math.pow(thetaA, 2)) / (2 * thetaB * thetaC);
+        Angle = Math.acos(temp);
+        Angle = Angle * (180.0 / Math.PI);
+        return Angle;
     }
 
     private double getPersentage(double compareNumber, double betweenAngle) {
-        return Math.max((((FULL_DEGREE - Math.abs(betweenAngle - compareNumber)) / FULL_DEGREE) * 100)
-                , (((FULL_DEGREE - (HALF_DEGREE - Math.abs(betweenAngle - compareNumber))) / FULL_DEGREE) * 100));
+        return (((HALF_DEGREE - Math.abs(betweenAngle - compareNumber))) / HALF_DEGREE) * 100;
     }
 
     private void compareAccuracy(float[][] resultArr) {
         float[] compareArr = {124.778F, 145.222F, 64.369F, 114.842F, 114.842F, 180F};
-
+        double totalPercentage = 0.0;
         double betweenAngle;
-        double persentage = 0.0;
+        double percentage = 0.0;
         for (int i = 0; i < 6; i++) {
             betweenAngle = getAngle(resultArr, i);
-            persentage = getPersentage(compareArr[i], betweenAngle);
-            Log.d("Accurancy", "목표 각도 :" + compareArr[i] + "  " + (i + 1) + "번 각도 : " + betweenAngle + "   정확도 : " + persentage);
+            percentage = getPersentage(compareArr[i], betweenAngle);
+            totalPercentage += percentage;
+            Log.d("Accurancy", "목표 각도 :" + compareArr[i] + "  " + (i + 1) + "번 각도 : " + betweenAngle + "   정확도 : " + percentage);
         }
-        Camera2BasicFragment.setPersentageText(String.valueOf(persentage / 6));
-        Log.d("Accurancy", "persentage: " + persentage / 6 + " %");
+        Camera2BasicFragment.setPercentageText(totalPercentage / 6);
+        Log.d("TotalAccurancy", "persentage: " + totalPercentage / 6 + " %");
     }
 
   /*

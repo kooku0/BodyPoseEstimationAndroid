@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
 import android.graphics.SurfaceTexture;
@@ -49,6 +50,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.tflitecamerademo.view.AutoFitTextureView;
@@ -87,7 +89,8 @@ public class Camera2BasicFragment extends Fragment
     private ImageClassifier classifier;
     public static int previewWidth;
 
-    public static TextView persentageText;
+    public static TextView percentageText;
+    public static LinearLayout bottomInfoLayout;
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
      * TextureView}.
@@ -241,14 +244,16 @@ public class Camera2BasicFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         // Get references to widgets.
         textureView = view.findViewById(R.id.texture);
-        persentageText = view.findViewById(R.id.persentage) ;
+        percentageText = view.findViewById(R.id.percentage);
+        bottomInfoLayout = view.findViewById(R.id.bottom_info_view);
     }
 
-    public static void setPersentageText(String persentageString) {
-
-        persentageText.post ( new Runnable() {
+    public static void setPercentageText(double percentageString) {
+        percentageText.post ( new Runnable() {
             public void run() {
-                persentageText.setText(persentageString);
+                if (percentageString >= 90.0) bottomInfoLayout.setBackgroundColor(Color.CYAN);
+                else bottomInfoLayout.setBackgroundColor(Color.WHITE);
+                percentageText.setText(String.format("%.2f", percentageString) + "%");
             }
         });
     }

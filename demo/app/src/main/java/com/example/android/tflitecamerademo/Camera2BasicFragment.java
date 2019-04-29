@@ -264,8 +264,8 @@ public class Camera2BasicFragment extends Fragment
     public static void setPercentageText(List<String> percentageList, double percentage) {
         percentageText.post ( new Runnable() {
             public void run() {
-                if (percentage >= 90.0) bottomInfoLayout.setBackgroundColor(Color.CYAN);
-                else bottomInfoLayout.setBackgroundColor(Color.WHITE);
+                if (percentage >= 90.0) percentageText.setBackgroundColor(Color.rgb(0, 255, 127));
+                else percentageText.setBackgroundColor(Color.WHITE);
                 percentageText.setText( String.format("%.2f", percentage) + "%");
                 percentageText1.setText(percentageList.get(0));
                 percentageText2.setText(percentageList.get(1));

@@ -277,7 +277,7 @@ public abstract class ImageClassifier {
             percentage = getPersentage(compareArr[i], betweenAngle);
             totalPercentage += percentage;
             Log.d("Accurancy", "목표 각도 :" + compareArr[i] + "  " + (i + 1) + "번 각도 : " + betweenAngle + "   정확도 : " + percentage);
-            percentageList.add("목표 각도 :" + compareArr[i] + "  " + (i + 1) + "번 각도 : " + String.format("%.2f", betweenAngle) + "   정확도 : " + String.format("%.2f", percentage) + "%");
+            percentageList.add("Target:" + compareArr[i] + "  " +  "  Angle " + (i + 1)+": " + String.format("%.2f", betweenAngle) + "   Accur: " + String.format("%.2f", percentage) + "%");
         }
         Camera2BasicFragment.setPercentageText(percentageList, totalPercentage / 6);
         Log.d("TotalAccurancy", "persentage: " + totalPercentage / 6 + " %");

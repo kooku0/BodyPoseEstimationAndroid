@@ -60,6 +60,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
@@ -90,6 +91,12 @@ public class Camera2BasicFragment extends Fragment
     public static int previewWidth;
 
     public static TextView percentageText;
+    public static TextView percentageText1;
+    public static TextView percentageText2;
+    public static TextView percentageText3;
+    public static TextView percentageText4;
+    public static TextView percentageText5;
+    public static TextView percentageText6;
     public static LinearLayout bottomInfoLayout;
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
@@ -244,16 +251,28 @@ public class Camera2BasicFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         // Get references to widgets.
         textureView = view.findViewById(R.id.texture);
-        percentageText = view.findViewById(R.id.percentage);
         bottomInfoLayout = view.findViewById(R.id.bottom_info_view);
+        percentageText = view.findViewById(R.id.percentage);
+        percentageText1 = view.findViewById(R.id.percentage1);
+        percentageText2 = view.findViewById(R.id.percentage2);
+        percentageText3 = view.findViewById(R.id.percentage3);
+        percentageText4 = view.findViewById(R.id.percentage4);
+        percentageText5 = view.findViewById(R.id.percentage5);
+        percentageText6 = view.findViewById(R.id.percentage6);
     }
 
-    public static void setPercentageText(double percentageString) {
+    public static void setPercentageText(List<String> percentageList, double percentage) {
         percentageText.post ( new Runnable() {
             public void run() {
-                if (percentageString >= 90.0) bottomInfoLayout.setBackgroundColor(Color.CYAN);
+                if (percentage >= 90.0) bottomInfoLayout.setBackgroundColor(Color.CYAN);
                 else bottomInfoLayout.setBackgroundColor(Color.WHITE);
-                percentageText.setText(String.format("%.2f", percentageString) + "%");
+                percentageText.setText( String.format("%.2f", percentage) + "%");
+                percentageText1.setText(percentageList.get(0));
+                percentageText2.setText(percentageList.get(1));
+                percentageText3.setText(percentageList.get(2));
+                percentageText4.setText(percentageList.get(3));
+                percentageText5.setText(percentageList.get(4));
+                percentageText6.setText(percentageList.get(5));
             }
         });
     }

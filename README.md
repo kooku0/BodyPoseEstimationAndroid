@@ -14,3 +14,5 @@ Body Pose Estimation (Android gpu)
 
 
 각도 6개를 이용하여 포즈매칭을 한다.
+
+<img src="./resource/skeleton.png" height="300px"/>

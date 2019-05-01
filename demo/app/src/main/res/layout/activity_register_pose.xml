@@ -10,13 +10,13 @@
         android:id="@+id/poseMatchingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="포즈 매칭 하기"/>
+        android:text="@string/poseMatching"/>
 
     <Button
         android:id="@+id/uploadImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="이미지 업로드"/>
+        android:text="@string/uploadImage"/>
 
 
 </LinearLayout>

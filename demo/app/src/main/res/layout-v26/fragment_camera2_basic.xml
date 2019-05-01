@@ -26,13 +26,13 @@
             android:id="@+id/switchCameraButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="카메라 전환" />
+            android:text="@string/switchCamera" />
         <Button
             android:id="@+id/registerPoseButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/switchCameraButton"
-            android:text="포즈 등록"/>
+            android:text="@string/registerPose"/>
 
         <com.example.android.tflitecamerademo.view.AutoFitTextureView
             android:id="@+id/texture"

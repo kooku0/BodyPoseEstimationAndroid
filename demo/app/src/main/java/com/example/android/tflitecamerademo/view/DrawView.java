@@ -37,13 +37,6 @@ public class DrawView extends View {
 
     public DrawView(Context context) {
         super(context);
-        Button button = findViewById(R.id.switchCameraButton);
-        button.setOnClickListener(new Button.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.e("sa","sad");
-            }
-        });
         init();
     }
 

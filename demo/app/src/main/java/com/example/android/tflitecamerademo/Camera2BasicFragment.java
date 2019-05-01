@@ -18,10 +18,10 @@ package com.example.android.tflitecamerademo;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
@@ -45,7 +45,6 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.util.Size;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
@@ -55,8 +54,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.tflitecamerademo.activity.RegisterPoseActivity;
 import com.example.android.tflitecamerademo.view.AutoFitTextureView;
-import com.example.android.tflitecamerademo.view.DrawView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -65,8 +64,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import static com.example.android.tflitecamerademo.view.DrawView.MAX_PREVIEW_HEIGHT;
 
 
 /**
@@ -253,14 +250,24 @@ public class Camera2BasicFragment extends Fragment
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
+        Button switchButton = view.findViewById(R.id.switchCameraButton);
+        Button backButton = view.findViewById(R.id.registerPoseButton);
 
-        Button button = view.findViewById(R.id.switchCameraButton);
-        button.setOnClickListener(new View.OnClickListener() {
+        switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 switchCamera();
             }
         });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterPoseActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

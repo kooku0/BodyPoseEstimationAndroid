@@ -165,7 +165,6 @@ public class Camera2BasicFragment extends Fragment
                 @Override
                 public void onOpened(@NonNull CameraDevice currentCameraDevice) {
                     // This method is called when the camera is opened.  We start camera preview here.
-                    Log.e("1번", "onOpend 호출");
                     cameraOpenCloseLock.release();
                     cameraDevice = currentCameraDevice;
                     createCameraPreviewSession();
@@ -173,7 +172,6 @@ public class Camera2BasicFragment extends Fragment
 
                 @Override
                 public void onDisconnected(@NonNull CameraDevice currentCameraDevice) {
-                    Log.e("1번", "onDisconnected 호출");
                     cameraOpenCloseLock.release();
                     currentCameraDevice.close();
                     cameraDevice = null;
@@ -181,7 +179,6 @@ public class Camera2BasicFragment extends Fragment
 
                 @Override
                 public void onError(@NonNull CameraDevice currentCameraDevice, int error) {
-                    Log.e("1번", "onError 호출");
                     cameraOpenCloseLock.release();
                     currentCameraDevice.close();
                     cameraDevice = null;
@@ -326,7 +323,6 @@ public class Camera2BasicFragment extends Fragment
 
     @Override
     public void onPause() {
-        Log.e("1번", "onPause 호출");
         closeCamera();
         stopBackgroundThread();
         super.onPause();
@@ -334,7 +330,6 @@ public class Camera2BasicFragment extends Fragment
 
     @Override
     public void onDestroy() {
-        Log.e("1번", "onDestroy 호출");
         if (classifier != null) {
             classifier.close();
         }
@@ -549,7 +544,6 @@ public class Camera2BasicFragment extends Fragment
      * Creates a new {@link CameraCaptureSession} for camera preview.
      */
     private void createCameraPreviewSession() {
-        Log.e("1번", "createCameraPreviewSession 호출");
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
             assert texture != null;

@@ -22,6 +22,12 @@
         android:layout_height="match_parent"
         android:background="#bb7700">
 
+        <Button
+            android:id="@+id/switchCameraButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="카메라 전환" />
+
         <com.example.android.tflitecamerademo.view.AutoFitTextureView
             android:id="@+id/texture"
             android:layout_width="match_parent"
@@ -41,6 +47,7 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/white"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/percentage"
                 android:layout_width="match_parent"
@@ -49,48 +56,54 @@
                 android:gravity="center"
                 android:text="TextView"
                 android:textSize="18sp" />
+
             <TextView
                 android:id="@+id/percentage1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="12sp"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/percentage2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/percentage3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/percentage4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/percentage5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/percentage6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textSize="12sp" />
 
         </LinearLayout>
 

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
 import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Point;
@@ -50,6 +51,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -84,20 +86,30 @@ public class Camera2BasicFragment extends Fragment
 
     private static final int PERMISSIONS_REQUEST_CODE = 1;
 
+    public static TextView percentageText;
+
+    public static TextView percentageText1;
+
+    public static TextView percentageText2;
+
+    public static TextView percentageText3;
+
+    public static TextView percentageText4;
+
+    public static TextView percentageText5;
+
+    public static TextView percentageText6;
+
+    public static LinearLayout bottomInfoLayout;
+
     private final Object lock = new Object();
     private boolean runClassifier = false;
     private boolean checkedPermissions = false;
     private ImageClassifier classifier;
     public static int previewWidth;
+    private Integer cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
 
-    public static TextView percentageText;
-    public static TextView percentageText1;
-    public static TextView percentageText2;
-    public static TextView percentageText3;
-    public static TextView percentageText4;
-    public static TextView percentageText5;
-    public static TextView percentageText6;
-    public static LinearLayout bottomInfoLayout;
+
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
      * TextureView}.
@@ -153,6 +165,7 @@ public class Camera2BasicFragment extends Fragment
                 @Override
                 public void onOpened(@NonNull CameraDevice currentCameraDevice) {
                     // This method is called when the camera is opened.  We start camera preview here.
+                    Log.e("1번", "onOpend 호출");
                     cameraOpenCloseLock.release();
                     cameraDevice = currentCameraDevice;
                     createCameraPreviewSession();
@@ -160,6 +173,7 @@ public class Camera2BasicFragment extends Fragment
 
                 @Override
                 public void onDisconnected(@NonNull CameraDevice currentCameraDevice) {
+                    Log.e("1번", "onDisconnected 호출");
                     cameraOpenCloseLock.release();
                     currentCameraDevice.close();
                     cameraDevice = null;
@@ -167,6 +181,7 @@ public class Camera2BasicFragment extends Fragment
 
                 @Override
                 public void onError(@NonNull CameraDevice currentCameraDevice, int error) {
+                    Log.e("1번", "onError 호출");
                     cameraOpenCloseLock.release();
                     currentCameraDevice.close();
                     cameraDevice = null;
@@ -241,6 +256,14 @@ public class Camera2BasicFragment extends Fragment
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
+
+        Button button = view.findViewById(R.id.switchCameraButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCamera();
+            }
+        });
         return view;
     }
 
@@ -262,11 +285,11 @@ public class Camera2BasicFragment extends Fragment
     }
 
     public static void setPercentageText(List<String> percentageList, double percentage) {
-        percentageText.post ( new Runnable() {
+        percentageText.post(new Runnable() {
             public void run() {
                 if (percentage >= 90.0) percentageText.setBackgroundColor(Color.rgb(0, 255, 127));
                 else percentageText.setBackgroundColor(Color.WHITE);
-                percentageText.setText( String.format("%.2f", percentage) + "%");
+                percentageText.setText(String.format("%.2f", percentage) + "%");
                 percentageText1.setText(percentageList.get(0));
                 percentageText2.setText(percentageList.get(1));
                 percentageText3.setText(percentageList.get(2));
@@ -290,7 +313,6 @@ public class Camera2BasicFragment extends Fragment
     public void onResume() {
         super.onResume();
         startBackgroundThread();
-
         // When the screen is turned off and turned back on, the SurfaceTexture is already
         // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
@@ -304,6 +326,7 @@ public class Camera2BasicFragment extends Fragment
 
     @Override
     public void onPause() {
+        Log.e("1번", "onPause 호출");
         closeCamera();
         stopBackgroundThread();
         super.onPause();
@@ -311,10 +334,30 @@ public class Camera2BasicFragment extends Fragment
 
     @Override
     public void onDestroy() {
+        Log.e("1번", "onDestroy 호출");
         if (classifier != null) {
             classifier.close();
         }
         super.onDestroy();
+    }
+
+
+    private void switchCamera() {
+        if (cameraPosition.equals(CameraCharacteristics.LENS_FACING_BACK)) {
+            cameraPosition = CameraCharacteristics.LENS_FACING_FRONT;
+            return;
+        }
+        cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
+
+        setUpCameraOutputs(0, 0);
+        closeCamera();
+        Activity activity = getActivity();
+        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        try {
+            manager.openCamera(cameraId, stateCallback, backgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -330,9 +373,8 @@ public class Camera2BasicFragment extends Fragment
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
+                if (facing != null && facing.equals(cameraPosition)) {
                     continue;
                 }
 
@@ -507,6 +549,7 @@ public class Camera2BasicFragment extends Fragment
      * Creates a new {@link CameraCaptureSession} for camera preview.
      */
     private void createCameraPreviewSession() {
+        Log.e("1번", "createCameraPreviewSession 호출");
         try {
             SurfaceTexture texture = textureView.getSurfaceTexture();
             assert texture != null;

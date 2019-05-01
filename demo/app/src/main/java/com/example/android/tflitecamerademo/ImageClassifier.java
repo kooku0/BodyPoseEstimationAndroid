@@ -23,6 +23,7 @@ import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 
+import com.example.android.tflitecamerademo.model.BaseAngle;
 import com.example.android.tflitecamerademo.view.DrawView;
 
 import java.io.FileInputStream;

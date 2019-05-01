@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.android.tflitecamerademo.Camera2BasicFragment;
 import com.example.android.tflitecamerademo.R;
@@ -36,6 +37,13 @@ public class DrawView extends View {
 
     public DrawView(Context context) {
         super(context);
+        Button button = findViewById(R.id.switchCameraButton);
+        button.setOnClickListener(new Button.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Log.e("sa","sad");
+            }
+        });
         init();
     }
 

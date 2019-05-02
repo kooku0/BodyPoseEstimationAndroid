@@ -33,7 +33,7 @@
         android:label="@string/app_name"
         android:theme="@style/MaterialTheme">
         <activity
-            android:name=".CameraActivity"
+            android:name=".activity.CameraActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -43,7 +43,8 @@
             </intent-filter>
         </activity>
         <activity android:name="android.example.com.tflitecamerademo.MaindffffActivity" />
-        <activity android:name="android.example.com.tflitecamerademo.MainActivityffffffff"></activity>
+        <activity android:name="android.example.com.tflitecamerademo.MainActivityffffffff" />
+        <activity android:name=".activity.RegisterPoseActivity"></activity>
     </application>
 
 </manifest>

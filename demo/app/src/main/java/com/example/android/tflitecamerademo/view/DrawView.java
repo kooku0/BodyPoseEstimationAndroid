@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.android.tflitecamerademo.Camera2BasicFragment;
 import com.example.android.tflitecamerademo.R;

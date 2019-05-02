@@ -18,6 +18,7 @@ package com.example.android.tflitecamerademo;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -44,17 +45,17 @@ import android.support.v4.content.ContextCompat;
 import android.text.SpannableStringBuilder;
 import android.util.Log;
 import android.util.Size;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.tflitecamerademo.activity.RegisterPoseActivity;
 import com.example.android.tflitecamerademo.view.AutoFitTextureView;
-import com.example.android.tflitecamerademo.view.DrawView;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -63,8 +64,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
-import static com.example.android.tflitecamerademo.view.DrawView.MAX_PREVIEW_HEIGHT;
 
 
 /**
@@ -84,20 +83,30 @@ public class Camera2BasicFragment extends Fragment
 
     private static final int PERMISSIONS_REQUEST_CODE = 1;
 
+    public static TextView percentageText;
+
+    public static TextView percentageText1;
+
+    public static TextView percentageText2;
+
+    public static TextView percentageText3;
+
+    public static TextView percentageText4;
+
+    public static TextView percentageText5;
+
+    public static TextView percentageText6;
+
+    public static LinearLayout bottomInfoLayout;
+
     private final Object lock = new Object();
     private boolean runClassifier = false;
     private boolean checkedPermissions = false;
     private ImageClassifier classifier;
     public static int previewWidth;
+    private Integer cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
 
-    public static TextView percentageText;
-    public static TextView percentageText1;
-    public static TextView percentageText2;
-    public static TextView percentageText3;
-    public static TextView percentageText4;
-    public static TextView percentageText5;
-    public static TextView percentageText6;
-    public static LinearLayout bottomInfoLayout;
+
     /**
      * {@link TextureView.SurfaceTextureListener} handles several lifecycle events on a {@link
      * TextureView}.
@@ -241,6 +250,24 @@ public class Camera2BasicFragment extends Fragment
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
+        Button switchButton = view.findViewById(R.id.switchCameraButton);
+        Button backButton = view.findViewById(R.id.registerPoseButton);
+
+        switchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchCamera();
+            }
+        });
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), RegisterPoseActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 
@@ -262,11 +289,11 @@ public class Camera2BasicFragment extends Fragment
     }
 
     public static void setPercentageText(List<String> percentageList, double percentage) {
-        percentageText.post ( new Runnable() {
+        percentageText.post(new Runnable() {
             public void run() {
                 if (percentage >= 90.0) percentageText.setBackgroundColor(Color.rgb(0, 255, 127));
                 else percentageText.setBackgroundColor(Color.WHITE);
-                percentageText.setText( String.format("%.2f", percentage) + "%");
+                percentageText.setText(String.format("%.2f", percentage) + "%");
                 percentageText1.setText(percentageList.get(0));
                 percentageText2.setText(percentageList.get(1));
                 percentageText3.setText(percentageList.get(2));
@@ -290,7 +317,6 @@ public class Camera2BasicFragment extends Fragment
     public void onResume() {
         super.onResume();
         startBackgroundThread();
-
         // When the screen is turned off and turned back on, the SurfaceTexture is already
         // available, and "onSurfaceTextureAvailable" will not be called. In that case, we can open
         // a camera and start preview from here (otherwise, we wait until the surface is ready in
@@ -317,6 +343,25 @@ public class Camera2BasicFragment extends Fragment
         super.onDestroy();
     }
 
+
+    private void switchCamera() {
+        if (cameraPosition.equals(CameraCharacteristics.LENS_FACING_BACK)) {
+            cameraPosition = CameraCharacteristics.LENS_FACING_FRONT;
+            return;
+        }
+        cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
+
+        setUpCameraOutputs(0, 0);
+        closeCamera();
+        Activity activity = getActivity();
+        CameraManager manager = (CameraManager) activity.getSystemService(Context.CAMERA_SERVICE);
+        try {
+            manager.openCamera(cameraId, stateCallback, backgroundHandler);
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Sets up member variables related to camera.
      *
@@ -330,9 +375,8 @@ public class Camera2BasicFragment extends Fragment
             for (String cameraId : manager.getCameraIdList()) {
                 CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
                 Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
+                if (facing != null && facing.equals(cameraPosition)) {
                     continue;
                 }
 

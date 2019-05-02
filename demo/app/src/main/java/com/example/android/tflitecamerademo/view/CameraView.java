@@ -33,7 +33,7 @@ public class CameraView extends View {
         return fragmentManager;
     }
 
-    //    Camera2BasicFragment myFragment = (Camera2BasicFragment) getFragmentManager().findFragmentByTag("camera");
+        Camera2BasicFragment myFragment = (Camera2BasicFragment) getFragmentManager().findFragmentByTag("camera");
     private void init() {
 //        Fragment fragment = new PropertyFragment();
 

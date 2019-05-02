@@ -347,9 +347,9 @@ public class Camera2BasicFragment extends Fragment
     private void switchCamera() {
         if (cameraPosition.equals(CameraCharacteristics.LENS_FACING_BACK)) {
             cameraPosition = CameraCharacteristics.LENS_FACING_FRONT;
-            return;
+//            return;
         }
-        cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
+        else cameraPosition = CameraCharacteristics.LENS_FACING_BACK;
 
         setUpCameraOutputs(0, 0);
         closeCamera();

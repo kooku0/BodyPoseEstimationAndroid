@@ -97,7 +97,7 @@ public class Camera2BasicFragment extends Fragment
 
     public static TextView percentageText6;
 
-    public static LinearLayout bottomInfoLayout;
+//    public static LinearLayout bottomInfoLayout;
 
     private final Object lock = new Object();
     private boolean runClassifier = false;
@@ -278,7 +278,7 @@ public class Camera2BasicFragment extends Fragment
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         // Get references to widgets.
         textureView = view.findViewById(R.id.texture);
-        bottomInfoLayout = view.findViewById(R.id.bottom_info_view);
+//        bottomInfoLayout = view.findViewById(R.id.bottom_info_view);
         percentageText = view.findViewById(R.id.percentage);
         percentageText1 = view.findViewById(R.id.percentage1);
         percentageText2 = view.findViewById(R.id.percentage2);

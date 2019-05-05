@@ -44,7 +44,8 @@
         </activity>
         <activity android:name="android.example.com.tflitecamerademo.MaindffffActivity" />
         <activity android:name="android.example.com.tflitecamerademo.MainActivityffffffff" />
-        <activity android:name=".activity.RegisterPoseActivity"></activity>
+        <activity android:name=".activity.RegisterPoseActivity" />
+        <activity android:name=".activity.PoseListActivity"></activity>
     </application>
 
 </manifest>

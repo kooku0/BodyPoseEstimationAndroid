@@ -54,6 +54,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.android.tflitecamerademo.activity.PoseListActivity;
 import com.example.android.tflitecamerademo.activity.RegisterPoseActivity;
 import com.example.android.tflitecamerademo.view.AutoFitTextureView;
 
@@ -251,7 +252,7 @@ public class Camera2BasicFragment extends Fragment
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_camera2_basic, container, false);
         Button switchButton = view.findViewById(R.id.switchCameraButton);
-        Button backButton = view.findViewById(R.id.registerPoseButton);
+        Button listButton = view.findViewById(R.id.poseListButton);
 
         switchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -260,10 +261,10 @@ public class Camera2BasicFragment extends Fragment
             }
         });
 
-        backButton.setOnClickListener(new View.OnClickListener() {
+        listButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), RegisterPoseActivity.class);
+                Intent intent = new Intent(getActivity(), PoseListActivity.class);
                 startActivity(intent);
             }
         });

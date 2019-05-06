@@ -30,11 +30,11 @@
             android:layout_height="wrap_content"
             android:text="@string/switchCamera" />
         <Button
-            android:id="@+id/registerPoseButton"
+            android:id="@+id/poseListButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/switchCameraButton"
-            android:text="@string/registerPose"/>
+            android:text="@string/listPose"/>
 
         <com.example.android.tflitecamerademo.view.AutoFitTextureView
             android:id="@+id/texture"

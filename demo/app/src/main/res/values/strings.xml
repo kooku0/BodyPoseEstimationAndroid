@@ -33,6 +33,6 @@
     <string name="uploadImage">이미지 업로드</string>
     <string name="switchCamera">카메라 전환</string>
     <string name="registerPose">포즈 등록</string>
-
+    <string name="listPose">포즈 리스트</string>
 
 </resources>

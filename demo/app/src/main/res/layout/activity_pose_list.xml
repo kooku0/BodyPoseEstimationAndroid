@@ -23,7 +23,7 @@
         app:layout_constraintVertical_bias="0.2" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/poseRegisterButton"
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_marginBottom="8dp"

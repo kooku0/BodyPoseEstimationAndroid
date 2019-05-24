@@ -61,7 +61,7 @@ private double getPersentage(double compareNumber, double betweenAngle) {
 
 ## Contribution
 
-1. Fork it (https://github.com/pnu-005-team2/fns_front)
+1. Fork it (http://github.com/koomg9599/BodyPoseEstimationAndroidt)
 2. Create your feature branch (git checkout -b feature/fooBar)
 3. Commit your changes (git commit -am 'Add some fooBar')
 4. Push to the branch (git push origin feature/fooBar)

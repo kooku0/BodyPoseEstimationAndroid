@@ -14,11 +14,7 @@ Body Pose Estimation을 이용하여 Android에서 포즈 매칭을 수행합니
 
 ***포즈 매칭***
 
-![](.\resource\3-3aba55b9-6c63-43f7-bf0d-fd3994832e33.jpeg)
-
-![](./resource/2-07fa826a-7c82-453f-8157-ab58e0494e27.jpeg)
-
-![](./resource/1-9fa66c71-6186-4f1d-8f77-231066685e79.jpeg)
+![](.\resource\screenshot.png)
 
 ## Requirements
 
@@ -32,7 +28,7 @@ Body Pose Estimation을 이용하여 Android에서 포즈 매칭을 수행합니
 
 입력된 상반신의 6개 edge들의  Angle을 추출하여 매칭시킬 skeleton의 Angle과 정확도를 측정한다.
 
-![](./resource/skeleton-b716e4ec-d644-4af5-b493-eab736d88aa3.png)
+<img src="./resource/skeleton-b716e4ec-d644-4af5-b493-eab736d88aa3.png" width=200 />
 
 **각도 계산**
 

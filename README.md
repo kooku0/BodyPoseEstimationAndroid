@@ -61,7 +61,11 @@ private double getPersentage(double compareNumber, double betweenAngle) {
 
 ## Contribution
 
-kim min jun
+Fork it (https://github.com/pnu-005-team2/fns_front)
+Create your feature branch (git checkout -b feature/fooBar)
+Commit your changes (git commit -am 'Add some fooBar')
+Push to the branch (git push origin feature/fooBar)
+Create a new Pull Request
 
 ## Reference
 

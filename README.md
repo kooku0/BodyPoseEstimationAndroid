@@ -14,7 +14,7 @@ Body Pose Estimation을 이용하여 Android에서 포즈 매칭을 수행합니
 
 ***포즈 매칭***
 
-<img src=".\resource\screenshot.png" width=600 />
+<img src=".\resource\screenshot.png" width=800 />
 
 ## Requirements
 

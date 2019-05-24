@@ -1,18 +1,16 @@
-# **Body Pose Estimation - Android**
+# Body Pose Estimation - Android
 
 Copyright (C) 2019 여름방학에는 인턴해야지
 
-## Featrues
+## Features
 
-Use Body Pose Estimation to perform pose matching on Android
+Perform pose matching by inferencing body pose estimation model on Android device
 
-- **Light Model**. Light Tensorflow Lite model that can be used lightly on mobile phones.
-- **Pose Matching**. Perform pose matching by caculation the angle of each joint.
-- **Pose Registration**. Register a pose to match.
+- **Lightweight Model**. Inference Tensorflow Lite model that can be used lightly on mobile devices.
+- **Pose Matching**. Perform pose matching by calculating the angle of each joint point.
+- **Pose Registration**. Register a pose that will be used on pose matching.
 
-## Screenshots
-
-***Pose Matching***
+## DEMOs
 
 <img src=".\resource\screenshot.png" width=800 />
 
@@ -34,29 +32,30 @@ The angles of the six edges of the input upper body are extracted and the angle 
 
 ```java
 private double getAngle(float[][] resultArr, int index) {
-        List<Integer> basePoints = BASE_ANGLE_LIST.get(index).getPoints();
-        double thetaA, thetaB, thetaC;
-        double temp, Angle;
-        thetaA = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(2)][1], 2) +
-                Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(2)][0], 2));
-        thetaB = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(1)][1], 2) +
-                Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(1)][0], 2));
-        thetaC = Math.sqrt(Math.pow(resultArr[basePoints.get(1)][1] - resultArr[basePoints.get(2)][1], 2) +
-                Math.pow(resultArr[basePoints.get(1)][0] - resultArr[basePoints.get(2)][0], 2));
+    List<Integer> basePoints = BASE_ANGLE_LIST.get(index).getPoints();
+    double thetaA, thetaB, thetaC;
+    double temp, Angle;
+    
+    thetaA = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(2)][1], 2) +
+                       Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(2)][0], 2));
+    thetaB = Math.sqrt(Math.pow(resultArr[basePoints.get(0)][1] - resultArr[basePoints.get(1)][1], 2) +
+                       Math.pow(resultArr[basePoints.get(0)][0] - resultArr[basePoints.get(1)][0], 2));
+    thetaC = Math.sqrt(Math.pow(resultArr[basePoints.get(1)][1] - resultArr[basePoints.get(2)][1], 2) +
+                       Math.pow(resultArr[basePoints.get(1)][0] - resultArr[basePoints.get(2)][0], 2));
 
-        temp = (Math.pow(thetaB, 2) + Math.pow(thetaC, 2) - Math.pow(thetaA, 2)) / (2 * thetaB * thetaC);
-        Angle = Math.acos(temp);
-        Angle = Angle * (180.0 / Math.PI);
-        return Angle;
-    }
+    temp = (Math.pow(thetaB, 2) + Math.pow(thetaC, 2) - Math.pow(thetaA, 2)) / (2 * thetaB * thetaC);
+    Angle = Math.acos(temp);
+    Angle = Angle * (180.0 / Math.PI);
+    return Angle;
+}
 ```
 
 **Accuracy calculation**
 
 ```java
 private double getPersentage(double compareNumber, double betweenAngle) {
-        return (((HALF_DEGREE - Math.abs(betweenAngle - compareNumber))) / HALF_DEGREE) * 100;
-    }
+    return (((HALF_DEGREE - Math.abs(betweenAngle - compareNumber))) / HALF_DEGREE) * 100;
+}
 ```
 
 ## Contribution
@@ -68,12 +67,10 @@ private double getPersentage(double compareNumber, double betweenAngle) {
 5. Create a new Pull Request
 
 ## Reference
-[https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu](https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu)
-
-[https://github.com/edvardHua/PoseEstimationForMobile](https://github.com/edvardHua/PoseEstimationForMobile)
-
-[https://www.tensorflow.org/lite/models/pose_estimation/overview](https://www.tensorflow.org/lite/models/pose_estimation/overview)
+- [https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu](https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu)
+- [https://github.com/edvardHua/PoseEstimationForMobile](https://github.com/edvardHua/PoseEstimationForMobile)
+- [https://www.tensorflow.org/lite/models/pose_estimation/overview](https://www.tensorflow.org/lite/models/pose_estimation/overview)
 
 ## License
 
-[Apache License 2.0](https://github.com/edvardHua/PoseEstimationForMobile/blob/master/LICENSE)
+[Apache License 2.0](LICENSE)

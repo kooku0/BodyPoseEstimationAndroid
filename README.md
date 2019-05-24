@@ -68,7 +68,8 @@ private double getPersentage(double compareNumber, double betweenAngle) {
 5. Create a new Pull Request
 
 ## Reference
-
+[https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu](https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu)
+[https://github.com/edvardHua/PoseEstimationForMobile](https://github.com/edvardHua/PoseEstimationForMobile)
 [https://www.tensorflow.org/lite/models/pose_estimation/overview](https://www.tensorflow.org/lite/models/pose_estimation/overview)
 
 ## License

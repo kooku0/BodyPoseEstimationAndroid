@@ -4,15 +4,15 @@ Copyright (C) 2019 여름방학에는 인턴해야지
 
 ## Featrues
 
-Body Pose Estimation을 이용하여 Android에서 포즈 매칭을 수행합니다.
+Use Body Pose Estimation to perform pose matching on Android
 
-- **경량화 모델**. 경량화된 Tensorflow Lite 모델로 휴대폰에서 가볍게 사용할 수 있습니다.
-- **포즈 매칭**. 각 조인트의 각도를 계산하여 포즈매칭을 수행합니다.
-- **포드 등록**. 매칭 시킬 포즈를 등록합니다.
+- **Light Model**. Light Tensorflow Lite model that can be used lightly on mobile phones.
+- **Pose Matching**. Perform pose matching by caculation the angle of each joint.
+- **Pose Registration**. Register a pose to match.
 
 ## Screenshots
 
-***포즈 매칭***
+***Pose Matching***
 
 <img src=".\resource\screenshot.png" width=800 />
 
@@ -24,13 +24,13 @@ Body Pose Estimation을 이용하여 Android에서 포즈 매칭을 수행합니
 
 ## Algorithm
 
-### 포즈 매칭
+### Pose Matching
 
-입력된 상반신의 6개 edge들의  Angle을 추출하여 매칭시킬 skeleton의 Angle과 정확도를 측정한다.
+The angles of the six edges of the input upper body are extracted and the angle and accuracy of the skeleton to be matched are measured.
 
 <img src="./resource/skeleton-b716e4ec-d644-4af5-b493-eab736d88aa3.png" width=200 />
 
-**각도 계산**
+**Angle calculation**
 
 ```java
 private double getAngle(float[][] resultArr, int index) {
@@ -51,7 +51,7 @@ private double getAngle(float[][] resultArr, int index) {
     }
 ```
 
-**정확도 계산**
+**Accuracy calculation**
 
 ```java
 private double getPersentage(double compareNumber, double betweenAngle) {
@@ -69,7 +69,9 @@ private double getPersentage(double compareNumber, double betweenAngle) {
 
 ## Reference
 [https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu](https://github.com/dongseokYang/Body-Pose-Estimation-Android-gpu)
+
 [https://github.com/edvardHua/PoseEstimationForMobile](https://github.com/edvardHua/PoseEstimationForMobile)
+
 [https://www.tensorflow.org/lite/models/pose_estimation/overview](https://www.tensorflow.org/lite/models/pose_estimation/overview)
 
 ## License
